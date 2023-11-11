@@ -1,34 +1,47 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CuentasService } from './cuentas.service';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Patch,
+} from '@nestjs/common';
 import { CreateCuentaDto } from './dto/create-cuenta.dto';
+import { CuentasService } from './cuentas.service';
+import { Cuenta } from './entities/cuenta.entity';
 import { UpdateCuentaDto } from './dto/update-cuenta.dto';
+
 
 @Controller('cuentas')
 export class CuentasController {
-  constructor(private readonly cuentasService: CuentasService) {}
-
-  @Post()
-  create(@Body() createCuentaDto: CreateCuentaDto) {
-    return this.cuentasService.create(createCuentaDto);
-  }
+  constructor(private cuentasService: CuentasService) {}
 
   @Get()
-  findAll() {
-    return this.cuentasService.findAll();
+  getCuentas() {
+    return this.cuentasService.getCuentas();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cuentasService.findOne(+id);
+  @Get(':id_cuenta')
+  getCuenta(@Param('id_cuenta', ParseIntPipe) id_cuenta: number): Promise<Cuenta> {
+    console.log(id_cuenta);
+    console.log(typeof id_cuenta);
+    return this.cuentasService.getCuenta(id_cuenta);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCuentaDto: UpdateCuentaDto) {
-    return this.cuentasService.update(+id, updateCuentaDto);
+  @Post()
+  createCuenta(@Body() CreateCuentaDto: CreateCuentaDto) {
+    return this.cuentasService.createCuenta(CreateCuentaDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cuentasService.remove(+id);
+  @Delete(':id_cuenta')
+  deleteCuenta(@Param('id_cuenta', ParseIntPipe) id_cuenta: number) {
+    return this.cuentasService.deleteCuenta(id_cuenta);
+  }
+
+  @Patch(':id_cuenta')
+  update(@Param('id_cuenta') id_cuenta: number, @Body() UpdateCuentaDto: UpdateCuentaDto) {
+    return this.cuentasService.update(id_cuenta, UpdateCuentaDto);
   }
 }

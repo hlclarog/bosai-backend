@@ -1,34 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Patch,
+} from '@nestjs/common';
 import { CiclodocService } from './ciclodoc.service';
 import { CreateCiclodocDto } from './dto/create-ciclodoc.dto';
 import { UpdateCiclodocDto } from './dto/update-ciclodoc.dto';
+import { Ciclodoc } from './entities/ciclodoc.entity';
 
-@Controller('ciclodoc')
+@Controller('ciclos')
 export class CiclodocController {
-  constructor(private readonly ciclodocService: CiclodocService) {}
-
-  @Post()
-  create(@Body() createCiclodocDto: CreateCiclodocDto) {
-    return this.ciclodocService.create(createCiclodocDto);
-  }
+  constructor(private ciclodocService: CiclodocService) {}
 
   @Get()
-  findAll() {
-    return this.ciclodocService.findAll();
+  getCiclodoc() {
+    return this.ciclodocService.getCiclodoc();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ciclodocService.findOne(+id);
+  @Get(':id_ciclo')
+  getCiclodocOne(@Param('id_ciclo', ParseIntPipe) id_ciclo: number): Promise<Ciclodoc> {
+    console.log(id_ciclo);
+    console.log(typeof id_ciclo);
+    return this.ciclodocService.getCiclodocOne(id_ciclo);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCiclodocDto: UpdateCiclodocDto) {
-    return this.ciclodocService.update(+id, updateCiclodocDto);
+  @Post()
+  createCiclodoc(@Body() CreateCiclodocDto: CreateCiclodocDto) {
+    return this.ciclodocService.createCiclodoc(CreateCiclodocDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ciclodocService.remove(+id);
+  @Delete(':id_ciclo')
+  deleteCiclodoc(@Param('id_ciclo', ParseIntPipe) id_ciclo: number) {
+    return this.ciclodocService.deleteCiclodoc(id_ciclo);
+  }
+
+  @Patch(':id_ciclo')
+  update(@Param('id_ciclo') id_ciclo: number, @Body() UpdateCiclodocDto: UpdateCiclodocDto) {
+    return this.ciclodocService.update(id_ciclo, UpdateCiclodocDto);
   }
 }

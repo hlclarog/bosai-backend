@@ -1,4 +1,13 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateCuentaDto } from './create-cuenta.dto';
+export class UpdateCuentaDto {
+    nom_cuenta?: string;
+    rsocial_cuenta?: string;
+    soc_cuenta?: string;
+    nit_cuenta?: number;
+    pais_cuenta?: string;
+    depto_cuenta?: string;
+    ciu_cuenta?: string;
+    tel_cuenta?: number;
+    dir_cuenta?: string; 
+    estado_cuenta?: string;  
 
-export class UpdateCuentaDto extends PartialType(CreateCuentaDto) {}
+}

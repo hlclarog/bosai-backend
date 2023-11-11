@@ -1,26 +1,50 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Cuenta } from './entities/cuenta.entity';
 import { CreateCuentaDto } from './dto/create-cuenta.dto';
 import { UpdateCuentaDto } from './dto/update-cuenta.dto';
 
 @Injectable()
 export class CuentasService {
-  create(createCuentaDto: CreateCuentaDto) {
-    return 'This action adds a new cuenta';
+  constructor(
+    @InjectRepository(Cuenta) private cuentaRepository: Repository<Cuenta>,
+  ) {}
+
+  async createCuenta(cuenta: CreateCuentaDto) {
+    const cuentaFound = await this.cuentaRepository.findOne({
+      where: {
+        nom_cuenta: cuenta.nom_cuenta,
+      },
+    });
+    if (cuentaFound) {
+      return new HttpException(
+        'Nombre de la cuenta ya existe',
+        HttpStatus.CONFLICT,
+      );
+    }
+    const newCuenta = this.cuentaRepository.create(cuenta);
+    return this.cuentaRepository.save(newCuenta);
   }
 
-  findAll() {
-    return `This action returns all cuentas`;
+  getCuentas() {
+    return this.cuentaRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cuenta`;
+  getCuenta(id_cuenta: number) {
+    return this.cuentaRepository.findOne({
+      where: {
+        id_cuenta,
+      },
+    });
   }
 
-  update(id: number, updateCuentaDto: UpdateCuentaDto) {
-    return `This action updates a #${id} cuenta`;
+  deleteCuenta(id_cuenta: number) {
+    return this.cuentaRepository.delete({ id_cuenta });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cuenta`;
+  update(id_cuenta: number, cuenta: UpdateCuentaDto) {
+    return this.cuentaRepository.update({ id_cuenta }, cuenta);
   }
 }
+

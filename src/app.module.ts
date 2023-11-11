@@ -11,6 +11,7 @@ import { SociedadesModule } from './sociedades/sociedades.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { ComitesModule } from './comites/comites.module';
 import { CiclodocModule } from './ciclodoc/ciclodoc.module';
+import { SistemasModule } from './sistemas/sistemas.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -31,7 +32,8 @@ import { CiclodocModule } from './ciclodoc/ciclodoc.module';
   SociedadesModule,
   UsuariosModule,
   ComitesModule,
-  CiclodocModule],
+  CiclodocModule,
+  SistemasModule],
   controllers: [AppController],
   providers: [AppService],
 })
