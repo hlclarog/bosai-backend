@@ -1,34 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AreasService } from './areas.service';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Patch,
+} from '@nestjs/common';
 import { CreateAreaDto } from './dto/create-area.dto';
+import { AreasService } from './areas.service';
+import { Area } from './entities/area.entity';
 import { UpdateAreaDto } from './dto/update-area.dto';
 
 @Controller('areas')
 export class AreasController {
-  constructor(private readonly areasService: AreasService) {}
-
-  @Post()
-  create(@Body() createAreaDto: CreateAreaDto) {
-    return this.areasService.create(createAreaDto);
-  }
+  constructor(private areasService: AreasService) {}
 
   @Get()
-  findAll() {
-    return this.areasService.findAll();
+  getAreas() {
+    return this.areasService.getAreas();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.areasService.findOne(+id);
+  @Get(':id_area')
+  getArea(@Param('id_area', ParseIntPipe) id_area: number): Promise<Area> {
+    console.log(id_area);
+    console.log(typeof id_area);
+    return this.areasService.getArea(id_area);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAreaDto: UpdateAreaDto) {
-    return this.areasService.update(+id, updateAreaDto);
+  @Post()
+  createArea(@Body() CreateAreaDto: CreateAreaDto) {
+    return this.areasService.createArea(CreateAreaDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.areasService.remove(+id);
+  @Delete(':id_area')
+  deleteArea(@Param('id_area', ParseIntPipe) id_area: number) {
+    return this.areasService.deleteArea(id_area);
+  }
+
+  @Patch(':id_area')
+  update(@Param('id_area') id_area: number, @Body() UpdateAreaDto: UpdateAreaDto) {
+    return this.areasService.update(id_area, UpdateAreaDto);
   }
 }

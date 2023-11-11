@@ -1,4 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateAreaDto } from './create-area.dto';
-
-export class UpdateAreaDto extends PartialType(CreateAreaDto) {}
+export class UpdateAreaDto {
+  nom_area?: string;
+  abr_area?: string;
+  desc_area?: string;
+  estado_area?: string;
+}
